@@ -1,6 +1,6 @@
 # Project: Exzur A. Lat — Personal Developer Portfolio & Techtal Studios
 
-Act as a senior full-stack developer, UI/UX designer, and creative director. Build a complete, modern, responsive personal developer portfolio website for **Exzur A. Lat**, featuring **Techtal Studios** as his independent creative technology studio brand.
+Act as full-stack developer, UI/UX designer, and creative director. Build a complete, modern, responsive personal developer portfolio website for **Exzur A. Lat**, featuring **Techtal Studios** as his independent creative technology studio brand.
 
 The website should feel like a professional developer portfolio combined with a minimalist indie development studio.
 
