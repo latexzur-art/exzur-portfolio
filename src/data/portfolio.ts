@@ -29,6 +29,7 @@ export interface ProjectItem {
    * No button is shown while status is "In Development" or when liveDemoUrl is null.
    */
   liveDemoUrl: string | null;
+  liveDemoLabel?: string;
   isPlaceholderSlot?: boolean;
 }
 
