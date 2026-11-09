@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #080808;
+  --bg-secondary: #111111;
+  --text-primary: #ffffff;
+  --text-secondary: #9ca3af;
+  --accent-electric: #38bdf8;
+  --accent-silver: #cbd5e1;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: #080808;
+  color: #ffffff;
+  color-scheme: dark;
+}
+
+body {
+  background-color: #080808;
+  color: #ffffff;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background-color: rgba(56, 189, 248, 0.22);
+  color: #ffffff;
+}
+
+/* Custom subtle scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #080808;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #222222;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #38bdf8;
+}
+
+/* Subtle technical grid and crosshair helpers */
+@layer utilities {
+  .bg-architectural-grid {
+    background-size: 48px 48px;
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  }
+
+  .bg-studio-grid {
+    background-size: 32px 32px;
+    background-image:
+      linear-gradient(to right, rgba(56, 189, 248, 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(56, 189, 248, 0.04) 1px, transparent 1px);
+  }
+}
