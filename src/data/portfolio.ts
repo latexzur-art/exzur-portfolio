@@ -6,6 +6,7 @@ export type ProjectCategory =
   | "3D Modeling";
 
 export interface ProjectItem {
+  liveDemoLabel: string;
   id: string;
   code: string;
   title: string;
@@ -21,15 +22,13 @@ export interface ProjectItem {
    */
   thumbnail: string | null;
   /**
-   * Provide a full URL when published, or leave as null when in development / private
+   * Provide a full URL when published, or leave as null to show a clear placeholder indicator
    */
   githubUrl: string | null;
   /**
-   * Provide a store/demo URL once published to stores/public.
-   * No button is shown while status is "In Development" or when liveDemoUrl is null.
+   * Provide a full URL when deployed, or leave as null to show a clear placeholder indicator
    */
   liveDemoUrl: string | null;
-  liveDemoLabel?: string;
   isPlaceholderSlot?: boolean;
 }
 
@@ -136,14 +135,14 @@ export const PORTFOLIO_DATA = {
         id: "techtal-games",
         code: "DIV // 01",
         name: "TECHTAL GAMES",
-        focus: "Interactive Entertainment & Game Systems",
+        focus: "Interactive Entertainment & Simulation",
         items: [
           "Indie games",
           "Interactive experiences",
           "Game development projects",
         ],
         description:
-          "Original mechanics-driven indie games and interactive 3D worlds built in Unity with custom C# systems.",
+          "Original cozy simulations and mechanics-driven indie game projects built in Unity with custom C# systems.",
       },
       {
         id: "techtal-assets",
@@ -152,7 +151,7 @@ export const PORTFOLIO_DATA = {
         focus: "3D Geometry & Digital Craft",
         items: ["3D models", "Blender assets", "Digital resources"],
         description:
-          "Game-ready 3D weapon packs, stylized low-poly models, and reusable Blender resources designed for indie creators.",
+          "Stylized low-poly 3D models, modular environment props, and reusable Blender resources designed for indie creators.",
       },
       {
         id: "techtal-software",
@@ -179,22 +178,22 @@ export const PORTFOLIO_DATA = {
           "Standalone desktop storytelling workspace featuring a local text-to-speech synthesis workflow.",
       },
       {
-        id: "rel-last-haven",
-        title: "Last Haven",
+        id: "rel-whiskers-haven",
+        title: "Whisker's Haven",
         division: "TECHTAL GAMES",
-        type: "3D Indie Game Project (Unity / C#)",
+        type: "Low-Poly 3D Simulation Game (Unity / C#)",
         status: "In Development",
         summary:
-          "An original 3D indie game developed in Unity and C#, combining custom-modeled 3D environments with core gameplay and survival-driven mechanics.",
+          "Cozy cat café management and simulation game combining custom 3D low-poly modeling with C# gameplay systems.",
       },
       {
-        id: "rel-forged-edge",
-        title: "Forged Edge — Stylized Sword Asset Pack",
+        id: "rel-lowpoly-pack",
+        title: "Stylized Interior & Café Props Collection",
         division: "TECHTAL ASSETS",
-        type: "Blender 3D Weapon Asset Collection",
-        status: "In Development",
+        type: "Blender 3D Asset Pack",
+        status: "Planned",
         summary:
-          "A curated collection of game-ready 3D sword and melee blade models crafted in Blender with clean topology for RPG and action projects.",
+          "Modular low-poly furniture and prop assets created in Blender for use in indie simulation and tabletop projects.",
       },
     ] as StudioReleaseItem[],
   },
@@ -228,16 +227,16 @@ export const PORTFOLIO_DATA = {
       liveDemoUrl: null,
     },
     {
-      id: "last-haven",
+      id: "whiskers-haven",
       code: "PRJ // 02",
-      title: "Last Haven",
-      subtitle: "3D Indie Game Project",
+      title: "Whisker's Haven",
+      subtitle: "Low-Poly Cat Café Simulator",
       description:
-        "An original 3D game project developed in Unity and C#. Combines custom gameplay mechanics, interactive systems, and 3D environment assets under the Techtal Games creative banner.",
+        "A low-poly 3D cat café simulation game developed in Unity and C#. Combines cozy management mechanics with custom-modeled low-poly environments and interactive feline behaviors.",
       highlights: [
-        "Core gameplay mechanics and interactive systems programmed in C#",
-        "Custom 3D environment layout and asset integration in Unity",
-        "Developed as a flagship indie game project under Techtal Games",
+        "Core café management and interaction systems programmed in C#",
+        "Custom low-poly 3D aesthetics and environment layout in Unity",
+        "Designed under the Techtal Games creative banner",
       ],
       technologies: ["Unity", "C#", "Blender", "3D Modeling"],
       category: "Game Development",
@@ -248,23 +247,43 @@ export const PORTFOLIO_DATA = {
       liveDemoUrl: null,
     },
     {
-      id: "forged-edge-sword-pack",
+      id: "reserveit",
       code: "PRJ // 03",
-      title: "Forged Edge — Sword Asset Pack",
-      subtitle: "Blender 3D Weapon Asset Collection",
+      title: "ReserveIT",
+      subtitle: "Facility & Equipment Scheduling System",
       description:
-        "A 3D weapon modeling project crafted in Blender featuring a modular collection of stylized and low-poly swords designed with clean topology for game engines.",
+        "A web-based facility and equipment scheduling system designed to streamline reservation requests, conflict detection, and availability tracking through a structured database-backed interface.",
       highlights: [
-        "Custom 3D blade, hilt, and guard geometry modeled in Blender",
-        "Optimized low-to-mid poly mesh topology ready for Unity import",
-        "Developed as an independent digital asset release under Techtal Assets",
+        "Centralized calendar & slot reservation workflow for facilities and equipment",
+        "Relational database schema for tracking bookings, users, and inventory status",
+        "Responsive web interface for administrators and requesters",
       ],
-      technologies: ["Blender", "3D Modeling", "UV Mapping", "Game Assets"],
-      category: "3D Modeling",
-      status: "In Development",
+      technologies: ["Web Development", "JavaScript", "PostgreSQL", "Database Systems"],
+      category: "Web Development",
+      status: "Active Project",
       thumbnail: null,
       githubUrl: null,
       liveDemoUrl: null,
+    },
+    {
+      id: "additional-project-slot",
+      code: "PRJ // 04",
+      title: "Additional Project Slot",
+      subtitle: "Editable Portfolio Entry Template",
+      description:
+        "Placeholder entry prepared for upcoming software engineering, web, game development, or 3D modeling projects. Easily duplicate or edit this object in src/data/portfolio.ts to publish new work.",
+      highlights: [
+        "Supports custom screenshots in /public/projects/ or schematic preview",
+        "Configurable GitHub repository and live deployment links",
+        "Supports primary and secondary category filtering (including 3D Modeling)",
+      ],
+      technologies: ["Blender", "3D Modeling", "Next.js", "TypeScript"],
+      category: "3D Modeling",
+      status: "Template Slot",
+      thumbnail: null,
+      githubUrl: null,
+      liveDemoUrl: null,
+      isPlaceholderSlot: true,
     },
   ] as ProjectItem[],
 

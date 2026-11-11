@@ -5,32 +5,54 @@ import {
   Mail,
   Linkedin,
   Github,
-  Send,
   Copy,
   Check,
   ArrowUpRight,
+  Terminal,
+  Gamepad2,
+  Code2,
+  MapPin,
+  Clock,
 } from "lucide-react";
 import { PORTFOLIO_DATA } from "@/data/portfolio";
 
+const INQUIRY_TOPICS = [
+  {
+    id: "software",
+    code: "INQ // 01",
+    title: "Software & Development",
+    subject: "Software Development Inquiry — Exzur A. Lat Portfolio",
+    description:
+      "Questions regarding desktop applications, Python utilities, or software engineering collaborations.",
+    icon: Code2,
+  },
+  {
+    id: "studio",
+    code: "INQ // 02",
+    title: "Techtal Studios — Games & 3D Assets",
+    subject: "Techtal Studios Inquiry — Games & 3D Assets",
+    description:
+      "Inquiries about upcoming indie game projects (Last Haven), Blender 3D weapon assets, or creative releases.",
+    icon: Gamepad2,
+  },
+  {
+    id: "general",
+    code: "INQ // 03",
+    title: "Networking & General Connection",
+    subject: "Hello from your Developer Portfolio",
+    description:
+      "Connect with me as a fellow Computer Science student, indie creator, or developer.",
+    icon: Terminal,
+  },
+];
+
 export default function Contact() {
-  const { contact } = PORTFOLIO_DATA;
-
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
-
-  const [status, setStatus] = useState<
-    "idle" | "submitting" | "submitted" | "mailto-ready" | "error"
-  >("idle");
+  const { contact, personal } = PORTFOLIO_DATA;
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [selectedTopicId, setSelectedTopicId] = useState<string>("software");
 
-  const isEmailPlaceholder =
-    contact.email.startsWith("[") || !contact.email.includes("@");
-  const isLinkedInPlaceholder =
-    contact.linkedin.startsWith("[") || !contact.linkedin.startsWith("http");
+  const selectedTopic =
+    INQUIRY_TOPICS.find((t) => t.id === selectedTopicId) || INQUIRY_TOPICS[0];
 
   const handleCopy = async (text: string, label: string) => {
     try {
@@ -38,51 +60,15 @@ export default function Contact() {
       setCopiedField(label);
       setTimeout(() => setCopiedField(null), 2000);
     } catch {
-      // Fallback if clipboard is restricted
+      // Ignore if clipboard is restricted
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    // If an external form endpoint (e.g. Formspree) is configured via env var, use it:
-    if (contact.formEndpoint) {
-      try {
-        setStatus("submitting");
-        const response = await fetch(contact.formEndpoint, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
-
-        if (response.ok) {
-          setStatus("submitted");
-          setFormData({ name: "", email: "", subject: "", message: "" });
-          return;
-        }
-        setStatus("error");
-      } catch {
-        setStatus("error");
-      }
-      return;
-    }
-
-    // Functional mailto fallback
-    const recipient = isEmailPlaceholder ? "" : contact.email;
-    const mailtoSubject = encodeURIComponent(
-      `[Portfolio Inquiry] ${formData.subject}`
-    );
-    const mailtoBody = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\nSubject: ${formData.subject}\n\nMessage:\n${formData.message}`
-    );
-
-    const mailtoUrl = `mailto:${recipient}?subject=${mailtoSubject}&body=${mailtoBody}`;
-    window.location.href = mailtoUrl;
-    setStatus("mailto-ready");
-  };
+  const encodedSubject = encodeURIComponent(selectedTopic.subject);
+  const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
+    contact.email
+  )}&su=${encodedSubject}`;
+  const mailtoUrl = `mailto:${contact.email}?subject=${encodedSubject}`;
 
   return (
     <section
@@ -107,23 +93,21 @@ export default function Contact() {
         </div>
 
         <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Left Column: Contact Channels & Placeholders */}
+          {/* Left Column: Direct Channels */}
           <div className="lg:col-span-5 space-y-6">
             <div>
-              <h3 className="text-xl font-semibold text-white">
-                Get in Touch
-              </h3>
+              <h3 className="text-xl font-semibold text-white">Get in Touch</h3>
               <p className="text-sm text-neutral-400 mt-2 leading-relaxed">
                 Whether you want to discuss a software project, connect about
                 game development and 3D assets, or reach out regarding Techtal
-                Studios, feel free to send a message or connect via the links
+                Studios, you can contact me directly through any of the channels
                 below.
               </p>
             </div>
 
             <div className="space-y-3">
               {/* Professional Email Card */}
-              <div className="p-5 bg-[#111111] border border-white/10 flex items-start justify-between gap-4">
+              <div className="p-5 bg-[#111111] border border-white/10 hover:border-white/25 transition-colors flex items-start justify-between gap-4">
                 <div className="flex items-start gap-3.5 min-w-0">
                   <div className="w-9 h-9 bg-[#080808] border border-white/10 flex items-center justify-center text-sky-400 shrink-0 mt-0.5">
                     <Mail className="w-4 h-4" />
@@ -132,23 +116,12 @@ export default function Contact() {
                     <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-500 block">
                       Professional Email
                     </span>
-                    {isEmailPlaceholder ? (
-                      <span className="text-xs sm:text-sm font-mono text-neutral-200 break-all mt-1 block">
-                        {contact.email}
-                      </span>
-                    ) : (
-                      <a
-                        href={`mailto:${contact.email}`}
-                        className="text-xs sm:text-sm font-mono text-white hover:text-sky-400 break-all mt-1 block transition-colors"
-                      >
-                        {contact.email}
-                      </a>
-                    )}
-                    {isEmailPlaceholder && (
-                      <span className="text-[11px] font-mono text-neutral-500 mt-1 block">
-                        Editable in src/data/portfolio.ts
-                      </span>
-                    )}
+                    <a
+                      href={mailtoUrl}
+                      className="text-xs sm:text-sm font-mono text-white hover:text-sky-400 break-all mt-1 block transition-colors"
+                    >
+                      {contact.email}
+                    </a>
                   </div>
                 </div>
 
@@ -168,7 +141,7 @@ export default function Contact() {
               </div>
 
               {/* LinkedIn Card */}
-              <div className="p-5 bg-[#111111] border border-white/10 flex items-start justify-between gap-4">
+              <div className="p-5 bg-[#111111] border border-white/10 hover:border-white/25 transition-colors flex items-start justify-between gap-4">
                 <div className="flex items-start gap-3.5 min-w-0">
                   <div className="w-9 h-9 bg-[#080808] border border-white/10 flex items-center justify-center text-sky-400 shrink-0 mt-0.5">
                     <Linkedin className="w-4 h-4" />
@@ -177,26 +150,15 @@ export default function Contact() {
                     <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-500 block">
                       LinkedIn Profile
                     </span>
-                    {isLinkedInPlaceholder ? (
-                      <span className="text-xs sm:text-sm font-mono text-neutral-200 break-all mt-1 block">
-                        {contact.linkedin}
-                      </span>
-                    ) : (
-                      <a
-                        href={contact.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs sm:text-sm font-mono text-white hover:text-sky-400 break-all mt-1 inline-flex items-center gap-1 transition-colors"
-                      >
-                        <span>{contact.linkedin}</span>
-                        <ArrowUpRight className="w-3.5 h-3.5" />
-                      </a>
-                    )}
-                    {isLinkedInPlaceholder && (
-                      <span className="text-[11px] font-mono text-neutral-500 mt-1 block">
-                        Editable in src/data/portfolio.ts
-                      </span>
-                    )}
+                    <a
+                      href={contact.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs sm:text-sm font-mono text-white hover:text-sky-400 break-all mt-1 inline-flex items-center gap-1 transition-colors"
+                    >
+                      <span>{contact.linkedin}</span>
+                      <ArrowUpRight className="w-3.5 h-3.5 shrink-0" />
+                    </a>
                   </div>
                 </div>
 
@@ -204,8 +166,8 @@ export default function Contact() {
                   type="button"
                   onClick={() => handleCopy(contact.linkedin, "linkedin")}
                   className="p-2 text-neutral-400 hover:text-white bg-[#080808] border border-white/10 transition-colors shrink-0"
-                  title="Copy LinkedIn value"
-                  aria-label="Copy LinkedIn value"
+                  title="Copy LinkedIn URL"
+                  aria-label="Copy LinkedIn URL"
                 >
                   {copiedField === "linkedin" ? (
                     <Check className="w-3.5 h-3.5 text-emerald-400" />
@@ -216,7 +178,7 @@ export default function Contact() {
               </div>
 
               {/* GitHub Card */}
-              <div className="p-5 bg-[#111111] border border-white/10 flex items-start justify-between gap-4">
+              <div className="p-5 bg-[#111111] border border-white/10 hover:border-white/25 transition-colors flex items-start justify-between gap-4">
                 <div className="flex items-start gap-3.5 min-w-0">
                   <div className="w-9 h-9 bg-[#080808] border border-white/10 flex items-center justify-center text-sky-400 shrink-0 mt-0.5">
                     <Github className="w-4 h-4" />
@@ -249,170 +211,155 @@ export default function Contact() {
                 </a>
               </div>
             </div>
+
+            {/* Location & Timezone Info Strip */}
+            <div className="grid grid-cols-2 gap-3 pt-1">
+              <div className="p-4 bg-[#111111] border border-white/10 flex items-center gap-3">
+                <MapPin className="w-4 h-4 text-sky-400 shrink-0" />
+                <div>
+                  <span className="text-[10px] font-mono uppercase text-neutral-500 block">
+                    Location
+                  </span>
+                  <span className="text-xs font-mono text-white">
+                    {personal.location}
+                  </span>
+                </div>
+              </div>
+              <div className="p-4 bg-[#111111] border border-white/10 flex items-center gap-3">
+                <Clock className="w-4 h-4 text-sky-400 shrink-0" />
+                <div>
+                  <span className="text-[10px] font-mono uppercase text-neutral-500 block">
+                    Timezone
+                  </span>
+                  <span className="text-xs font-mono text-white">
+                    PHT (UTC+8)
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Right Column: Contact Form */}
+          {/* Right Column: Direct Dispatch & Topic Selector (Replaces Form) */}
           <div className="lg:col-span-7">
-            <form
-              onSubmit={handleSubmit}
-              className="bg-[#111111] border border-white/10 p-6 sm:p-8 space-y-5"
-            >
-              <div className="flex items-center justify-between pb-4 border-b border-white/10">
-                <span className="text-xs font-mono uppercase tracking-widest text-white">
-                  SEND A MESSAGE
-                </span>
-                <span className="text-[11px] font-mono text-neutral-500">
-                  {contact.formEndpoint
-                    ? "DIRECT ENDPOINT ACTIVE"
-                    : "MAILTO CLIENT FALLBACK"}
-                </span>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div>
-                  <label
-                    htmlFor="contact-name"
-                    className="block text-xs font-mono uppercase tracking-wider text-neutral-300 mb-2"
-                  >
-                    Name <span className="text-sky-400">*</span>
-                  </label>
-                  <input
-                    id="contact-name"
-                    name="name"
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
-                    placeholder="Your name"
-                    className="w-full px-3.5 py-2.5 bg-[#080808] border border-white/15 focus:border-sky-400 focus:outline-none text-sm text-white placeholder:text-neutral-600 transition-colors"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="contact-email"
-                    className="block text-xs font-mono uppercase tracking-wider text-neutral-300 mb-2"
-                  >
-                    Email <span className="text-sky-400">*</span>
-                  </label>
-                  <input
-                    id="contact-email"
-                    name="email"
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                    placeholder="you@example.com"
-                    className="w-full px-3.5 py-2.5 bg-[#080808] border border-white/15 focus:border-sky-400 focus:outline-none text-sm text-white placeholder:text-neutral-600 transition-colors"
-                  />
-                </div>
-              </div>
-
+            <div className="bg-[#111111] border border-white/10 p-6 sm:p-8 flex flex-col justify-between h-full space-y-6">
               <div>
-                <label
-                  htmlFor="contact-subject"
-                  className="block text-xs font-mono uppercase tracking-wider text-neutral-300 mb-2"
-                >
-                  Subject <span className="text-sky-400">*</span>
-                </label>
-                <input
-                  id="contact-subject"
-                  name="subject"
-                  type="text"
-                  required
-                  value={formData.subject}
-                  onChange={(e) =>
-                    setFormData({ ...formData, subject: e.target.value })
-                  }
-                  placeholder="Project inquiry, collaboration, or general question"
-                  className="w-full px-3.5 py-2.5 bg-[#080808] border border-white/15 focus:border-sky-400 focus:outline-none text-sm text-white placeholder:text-neutral-600 transition-colors"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="contact-message"
-                  className="block text-xs font-mono uppercase tracking-wider text-neutral-300 mb-2"
-                >
-                  Message <span className="text-sky-400">*</span>
-                </label>
-                <textarea
-                  id="contact-message"
-                  name="message"
-                  rows={5}
-                  required
-                  value={formData.message}
-                  onChange={(e) =>
-                    setFormData({ ...formData, message: e.target.value })
-                  }
-                  placeholder="Write your message here..."
-                  className="w-full px-3.5 py-2.5 bg-[#080808] border border-white/15 focus:border-sky-400 focus:outline-none text-sm text-white placeholder:text-neutral-600 transition-colors resize-y"
-                />
-              </div>
-
-              <div className="pt-2 flex flex-wrap items-center justify-between gap-4">
-                <button
-                  type="submit"
-                  disabled={status === "submitting"}
-                  className="inline-flex items-center gap-2.5 px-6 py-3 bg-white hover:bg-sky-400 text-[#080808] text-xs font-mono uppercase tracking-widest font-semibold transition-colors disabled:opacity-50"
-                >
-                  <Send className="w-3.5 h-3.5" />
-                  <span>
-                    {status === "submitting" ? "Sending..." : "Send Message"}
+                <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-white/10">
+                  <span className="text-xs font-mono uppercase tracking-widest text-white">
+                    DIRECT INQUIRY DISPATCH
                   </span>
-                </button>
+                  <span className="text-[11px] font-mono text-sky-400">
+                    SELECT A TOPIC BELOW
+                  </span>
+                </div>
 
-                {formData.message && (
+                <p className="text-xs sm:text-sm text-neutral-400 mt-4 leading-relaxed">
+                  Select an inquiry topic to pre-fill the subject line, then
+                  launch a direct email in Gmail, your default mail client, or
+                  connect on LinkedIn.
+                </p>
+
+                {/* Selectable Inquiry Topics */}
+                <div className="mt-5 space-y-3">
+                  {INQUIRY_TOPICS.map((topic) => {
+                    const Icon = topic.icon;
+                    const isSelected = topic.id === selectedTopicId;
+                    return (
+                      <button
+                        key={topic.id}
+                        type="button"
+                        onClick={() => setSelectedTopicId(topic.id)}
+                        className={`w-full text-left p-4 border transition-colors flex items-start gap-4 ${
+                          isSelected
+                            ? "bg-[#080808] border-sky-400/60"
+                            : "bg-[#0c0c0c] border-white/10 hover:border-white/25"
+                        }`}
+                      >
+                        <div
+                          className={`w-9 h-9 shrink-0 border flex items-center justify-center mt-0.5 ${
+                            isSelected
+                              ? "bg-sky-400/10 border-sky-400/40 text-sky-400"
+                              : "bg-[#111111] border-white/10 text-neutral-400"
+                          }`}
+                        >
+                          <Icon className="w-4 h-4" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="text-sm font-semibold text-white">
+                              {topic.title}
+                            </span>
+                            <span
+                              className={`text-[10px] font-mono ${
+                                isSelected ? "text-sky-400" : "text-neutral-600"
+                              }`}
+                            >
+                              {topic.code}
+                            </span>
+                          </div>
+                          <p className="text-xs text-neutral-400 mt-1 leading-relaxed">
+                            {topic.description}
+                          </p>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Action Footer */}
+              <div className="pt-5 border-t border-white/10 space-y-4">
+                <div className="px-3.5 py-2.5 bg-[#080808] border border-white/10 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+                  <span className="text-neutral-500">SUBJECT LINE:</span>
+                  <span className="text-sky-400 truncate">
+                    &ldquo;{selectedTopic.subject}&rdquo;
+                  </span>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3">
+                  {/* Primary: Open directly in Gmail Web */}
+                  <a
+                    href={gmailComposeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2.5 px-5 py-3 bg-white hover:bg-sky-400 text-[#080808] text-xs font-mono uppercase tracking-widest font-semibold transition-colors"
+                  >
+                    <Mail className="w-3.5 h-3.5" />
+                    <span>Compose in Gmail</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </a>
+
+                  {/* Secondary: Copy Email Address */}
                   <button
                     type="button"
-                    onClick={() =>
-                      handleCopy(
-                        `Name: ${formData.name}\nEmail: ${formData.email}\nSubject: ${formData.subject}\n\n${formData.message}`,
-                        "formatted-message"
-                      )
-                    }
-                    className="inline-flex items-center gap-2 px-3.5 py-2.5 text-xs font-mono text-neutral-400 hover:text-white bg-[#080808] border border-white/10 transition-colors"
+                    onClick={() => handleCopy(contact.email, "cta-email")}
+                    className="inline-flex items-center gap-2 px-4 py-3 bg-[#080808] hover:bg-white/[0.06] text-white border border-white/15 hover:border-white/35 text-xs font-mono uppercase tracking-wider transition-colors"
                   >
-                    {copiedField === "formatted-message" ? (
+                    {copiedField === "cta-email" ? (
                       <>
                         <Check className="w-3.5 h-3.5 text-emerald-400" />
-                        <span>Copied to Clipboard</span>
+                        <span>Email Copied!</span>
                       </>
                     ) : (
                       <>
-                        <Copy className="w-3.5 h-3.5" />
-                        <span>Copy Formatted Message</span>
+                        <Copy className="w-3.5 h-3.5 text-sky-400" />
+                        <span>Copy Email</span>
                       </>
                     )}
                   </button>
-                )}
+
+                  {/* Tertiary: Connect on LinkedIn */}
+                  <a
+                    href={contact.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-3 bg-[#080808] hover:bg-white/[0.06] text-neutral-300 hover:text-white border border-white/10 hover:border-white/30 text-xs font-mono uppercase tracking-wider transition-colors"
+                  >
+                    <Linkedin className="w-3.5 h-3.5 text-sky-400" />
+                    <span>Message on LinkedIn</span>
+                  </a>
+                </div>
               </div>
-
-              {status === "submitted" && (
-                <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono text-emerald-300">
-                  Your message has been sent. Thank you for reaching out!
-                </div>
-              )}
-
-              {status === "mailto-ready" && (
-                <div className="p-3.5 bg-sky-500/10 border border-sky-500/30 text-xs font-mono text-sky-300">
-                  Opened your default mail client with your pre-filled message.
-                  {isEmailPlaceholder &&
-                    " (Note: Replace [YOUR PROFESSIONAL EMAIL] in src/data/portfolio.ts to pre-fill the recipient address.)"}
-                </div>
-              )}
-
-              {status === "error" && (
-                <div className="p-3.5 bg-red-500/10 border border-red-500/30 text-xs font-mono text-red-300">
-                  Could not submit via the endpoint. Please use the Copy
-                  Formatted Message button or email directly.
-                </div>
-              )}
-            </form>
+            </div>
           </div>
         </div>
       </div>
