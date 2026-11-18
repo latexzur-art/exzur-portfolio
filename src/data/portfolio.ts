@@ -85,9 +85,10 @@ export const PORTFOLIO_DATA = {
      * Set `availableForEmployment: true` only when actively seeking employment.
      */
     status: {
-      availableForEmployment: false,
+      availableForEmployment: true,
       label: "CS Student @ STI College Lucena · Building Independent Projects",
-      employmentOpenLabel: "Open to Software Development Internships & Opportunities",
+      employmentOpenLabel:
+        "Open for Commissions — Website & Desktop Software Development",
     },
     about: {
       headline:

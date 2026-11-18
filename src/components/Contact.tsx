@@ -20,10 +20,10 @@ const INQUIRY_TOPICS = [
   {
     id: "software",
     code: "INQ // 01",
-    title: "Software & Development",
-    subject: "Software Development Inquiry — Exzur A. Lat Portfolio",
+    title: "Website & Software Commissions",
+    subject: "Website / Software Commission Inquiry — Exzur A. Lat",
     description:
-      "Questions regarding desktop applications, Python utilities, or software engineering collaborations.",
+      "Inquiries for custom websites, landing pages, web applications, or Python desktop software commissions.",
     icon: Code2,
   },
   {
