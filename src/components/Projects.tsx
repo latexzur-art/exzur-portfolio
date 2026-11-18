@@ -22,6 +22,33 @@ function ProjectSchematicPreview({ project }: { project: ProjectItem }) {
   const isGame = project.category === "Game Development";
   const isWeb = project.category === "Web Development";
 
+  const previewMeta = isDesktop
+    ? {
+        envLabel: "PYTHON // DESKTOP UI",
+        specLabel: "CustomTkinter & Local TTS",
+        Icon: Terminal,
+      }
+    : isGame
+    ? {
+        envLabel: "UNITY 3D // SCENE VIEW",
+        specLabel: "3D Gameplay & World Mesh",
+        Icon: Gamepad2,
+      }
+    : isWeb
+    ? {
+        envLabel: "WEB // APPLICATION UI",
+        specLabel: "Full-Stack Web Interface",
+        Icon: Calendar,
+      }
+    : {
+        envLabel: "BLENDER // 3D VIEWPORT",
+        specLabel: "Weapon Topology & UV Mesh",
+        Icon: Box,
+      };
+
+  const PreviewIcon = previewMeta.Icon;
+  const shortTitle = project.title.split(" — ")[0];
+
   return (
     <div className="relative w-full h-48 bg-[#080808] border-b border-white/10 overflow-hidden flex flex-col justify-between p-4 select-none">
       {/* Fine Architectural Grid Background */}
@@ -41,93 +68,24 @@ function ProjectSchematicPreview({ project }: { project: ProjectItem }) {
         </span>
       </div>
 
-      {/* Center Technical Wireframe Graphic */}
+      {/* Unified Center Technical Wireframe Graphic */}
       <div className="relative z-10 my-auto flex items-center justify-center">
-        {isDesktop && (
-          <div className="w-56 border border-white/15 bg-[#111111]/90 p-2.5 space-y-2">
-            <div className="flex items-center justify-between border-b border-white/10 pb-1.5">
-              <div className="flex gap-1">
-                <span className="w-1.5 h-1.5 bg-white/30" />
-                <span className="w-1.5 h-1.5 bg-white/30" />
-                <span className="w-1.5 h-1.5 bg-sky-400/60" />
-              </div>
-              <span className="text-[9px] font-mono text-neutral-400">
-                storyforge_tts.py
-              </span>
-            </div>
-            <div className="grid grid-cols-3 gap-2">
-              <div className="col-span-2 space-y-1">
-                <div className="h-1.5 w-full bg-white/15" />
-                <div className="h-1.5 w-4/5 bg-white/10" />
-                <div className="h-1.5 w-3/5 bg-sky-400/30" />
-              </div>
-              <div className="border border-white/10 flex items-center justify-center p-1">
-                <Terminal className="w-4 h-4 text-sky-400/80" />
-              </div>
-            </div>
+        <div className="w-64 border border-white/15 bg-[#111111]/90 p-3 flex items-center justify-between gap-3">
+          <div className="space-y-1.5 min-w-0">
+            <span className="text-[9px] font-mono text-sky-400 uppercase block">
+              {previewMeta.envLabel}
+            </span>
+            <span className="text-xs font-mono text-white block truncate">
+              {shortTitle}
+            </span>
+            <span className="text-[9px] font-mono text-neutral-500 block truncate">
+              {previewMeta.specLabel}
+            </span>
           </div>
-        )}
-
-        {isGame && (
-          <div className="w-56 border border-white/15 bg-[#111111]/90 p-3 flex items-center justify-between">
-            <div className="space-y-1.5">
-              <span className="text-[9px] font-mono text-sky-400 uppercase block">
-                UNITY 3D // SCENE VIEW
-              </span>
-              <span className="text-xs font-mono text-white block">
-                {project.title}
-              </span>
-              <span className="text-[9px] font-mono text-neutral-500 block">
-                3D Gameplay &amp; World Mesh
-              </span>
-            </div>
-            <div className="w-11 h-11 border border-sky-400/40 bg-sky-400/5 flex items-center justify-center">
-              <Gamepad2 className="w-5 h-5 text-sky-400" />
-            </div>
+          <div className="w-11 h-11 shrink-0 border border-sky-400/40 bg-sky-400/5 flex items-center justify-center">
+            <PreviewIcon className="w-5 h-5 text-sky-400" />
           </div>
-        )}
-
-        {isWeb && (
-          <div className="w-56 border border-white/15 bg-[#111111]/90 p-2.5 space-y-2">
-            <div className="flex items-center justify-between border-b border-white/10 pb-1">
-              <span className="text-[9px] font-mono text-neutral-400">
-                WEB APPLICATION // UI
-              </span>
-              <Calendar className="w-3 h-3 text-sky-400" />
-            </div>
-            <div className="grid grid-cols-4 gap-1">
-              {Array.from({ length: 8 }).map((_, i) => (
-                <div
-                  key={i}
-                  className={`h-3 border ${
-                    i === 2 || i === 5
-                      ? "border-sky-400/50 bg-sky-400/15"
-                      : "border-white/10 bg-white/[0.03]"
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {!isDesktop && !isGame && !isWeb && (
-          <div className="w-56 border border-white/15 bg-[#111111]/90 p-3 flex items-center justify-between">
-            <div className="space-y-1.5">
-              <span className="text-[9px] font-mono text-sky-400 uppercase block">
-                BLENDER // 3D VIEWPORT
-              </span>
-              <span className="text-xs font-mono text-white block truncate max-w-[140px]">
-                {project.title}
-              </span>
-              <span className="text-[9px] font-mono text-neutral-500 block">
-                Weapon Topology &amp; UV Mesh
-              </span>
-            </div>
-            <div className="w-11 h-11 border border-sky-400/40 bg-sky-400/5 flex items-center justify-center">
-              <Box className="w-5 h-5 text-sky-400" />
-            </div>
-          </div>
-        )}
+        </div>
       </div>
 
       {/* Bottom Schematic Metadata */}
