@@ -119,11 +119,7 @@ export default function Navbar() {
             target={isLinkedInPlaceholder ? undefined : "_blank"}
             rel={isLinkedInPlaceholder ? undefined : "noopener noreferrer"}
             aria-label="LinkedIn Profile"
-            title={
-              isLinkedInPlaceholder
-                ? `LinkedIn: ${PORTFOLIO_DATA.contact.linkedin} (Configure in src/data/portfolio.ts)`
-                : "LinkedIn Profile"
-            }
+            title="LinkedIn Profile"
             className="p-2 text-neutral-400 hover:text-white hover:bg-white/[0.04] border border-transparent hover:border-white/10 transition-colors"
           >
             <Linkedin className="w-4 h-4" />

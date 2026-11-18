@@ -34,7 +34,7 @@ function ProjectSchematicPreview({ project }: { project: ProjectItem }) {
       <div className="relative z-10 flex items-center justify-between text-[10px] font-mono text-neutral-500">
         <span className="flex items-center gap-1.5">
           <span className="w-1.5 h-1.5 bg-sky-400/80 inline-block" />
-          <span>{project.code} // PREVIEW PLACEHOLDER</span>
+          <span>{project.code} // SYSTEM ARCHITECTURE</span>
         </span>
         <span className="uppercase tracking-wider text-neutral-600">
           {project.category}
@@ -130,10 +130,10 @@ function ProjectSchematicPreview({ project }: { project: ProjectItem }) {
         )}
       </div>
 
-      {/* Bottom Placeholder Notice */}
+      {/* Bottom Schematic Metadata */}
       <div className="relative z-10 flex items-center justify-between text-[10px] font-mono text-neutral-500">
-        <span>[THUMBNAIL PLACEHOLDER]</span>
-        <span className="text-neutral-600">16:9 FRAME</span>
+        <span>TECHTAL STUDIOS // BUILD</span>
+        <span className="text-neutral-600">16:9 VIEWPORT</span>
       </div>
     </div>
   );
